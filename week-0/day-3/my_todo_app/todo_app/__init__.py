@@ -20,11 +20,27 @@ def create_app(test_config=None):
         the_view += '---List Ends Here---' + '<br/>'
         return the_view
 
+    def get_todos_by_name(name):
+        if name == 'geetanjali':
+           return ['running', 'listen music']
+        elif name == 'shivang':
+           return ['wake up', 'coffee']
+        elif name == 'dark':
+           return ['counter strike']
+        else:
+           return []
+
+    # http://127.0.0.1:5000/todos?name=geetanjali
     @app.route('/todos')
     def todos():
         name = request.args.get('name')
+        print('----------')
         print(name)
-        return todo_view([])
+        print('----------')
+
+        person_todo_list = get_todos_by_name(name)
+        return todo_view(person_todo_list)
+
     @app.route('/geetanjali')
     def geetanjali():
         my_todos = ['running', 'listen music']
