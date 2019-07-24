@@ -39,7 +39,10 @@ def create_app(test_config=None):
         return 
 
     def get_todos_by_name(name):
-        return select_todos(name)
+        try:
+            return select_todos(name)
+        except:
+            return None
 
     # http://127.0.0.1:5000/todos?name=geetanjali
     @app.route('/todos')
@@ -51,7 +54,10 @@ def create_app(test_config=None):
 
         person_todo_list = get_todos_by_name(name)
         #return todo_view(person_todo_list)
-        return render_template('todo_view.html', todos=person_todo_list)
+        if person_todo_list == None:
+            return render_template('404.html'), 404
+        else:
+            return render_template('todo_view.html', todos=person_todo_list)
 
     @app.route('/add_todos')
     def add_todos():
@@ -59,6 +65,12 @@ def create_app(test_config=None):
         todo = request.args.get('todo')
         add_todo_by_name(name, todo)
         return 'Added Successfully'
+
+    @app.route('/delete_todo')
+    def delete_todo():
+        name = request.args.get('name')
+        todo = request.args.get('todo')
+        return 'deleted successfully'
 
     return app
 
